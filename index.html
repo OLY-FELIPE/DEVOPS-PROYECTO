@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Maravillas CSS - Interfaz Dinámica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fc 0%, #e9eef4 100%);
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* contenedor principal con efecto glassmorphism suave */
+        .glass-card {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(14px);
+            border-radius: 3rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255,255,255,0.6);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* header elegante */
+        .hero {
+            background: linear-gradient(135deg, #1A2A6C, #b21f1f, #fdbb4d);
+            background-size: 200% 200%;
+            animation: gradientShift 12s ease infinite;
+            padding: 2rem 2rem 2.5rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%;}
+            50% { background-position: 100% 50%;}
+            100% { background-position: 0% 50%;}
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #fff, #ffecb3);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .hero p {
+            color: rgba(255,255,240,0.9);
+            margin-top: 0.75rem;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* panel de controles y contenido */
+        .dashboard {
+            padding: 2rem 2rem 2.5rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2.5rem;
+            background: rgba(255,255,245,0.5);
+            padding: 1.2rem 1.5rem;
+            border-radius: 2rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+            min-width: 160px;
+        }
+
+            color: #1f2a48;
+
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+
+            gap: 6px;
+        }
+
+        .input-group label i {
+            font-style: normal;
+
+            font-weight: normal;
+            font-size: 1.1rem;
+        }
+
+        input, select {
+            background: white;
+            border: 1px solid #cdd9ed;
+            padding: 0.75rem 1rem;
+
+            border-radius: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: 0.2s;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            border-color: #b21f1f;
+            box-shadow: 0 0 0 3px rgba(178,31,31,0.2);
+        }
+
+        button {
+            background: #1f2a48;
+            border: none;
+            padding: 0.75rem 1.8rem;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        button:hover {
+            background: #b21f1f;
+            transform: scale(0.97);
+            box-shadow: 0 8px 20px rgba(178,31,31,0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* tarjetas dinámicas */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1.8rem;
+            padding: 1.5rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 12px 22px -10px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            backdrop-filter: blur(2px);
+            animation: fadeUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.2);
+            border-color: rgba(178,31,31,0.3);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #1A2A6C, #b21f1f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .card-desc {
+            color: #2c3e4e;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        .card-badge {
+            background: #eef2ff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #1f2a48;
+            align-self: flex-start;
+        }
+
+        .empty-state {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 3rem;
+            background: rgba(255,255,245,0.6);
+            border-radius: 2rem;
+            color: #5b6e8c;
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem 2rem 1.5rem;
+            font-size: 0.75rem;
+            color: #6c7a91;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            background: rgba(245,245,250,0.5);
+        }
+
+        @media (max-width: 680px) {
+            body {
+                padding: 1rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .action-buttons {
+                justify-content: flex-end;
+            }
+            .dashboard {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glass-card">
+    <div class="hero">
+        <h1>✨ Generador dinámico ✨</h1>
+        <p>Tarjetas interactivas con colores, categorías y eliminación en tiempo real</p>
+    </div>
+
+    <div class="dashboard">
+        <div class="controls">
+            <div class="input-group">
+                <label><span>📝</span> Título</label>
+                <input type="text" id="titleInput" placeholder="Ej: Aurora boreal" value="Nueva tarjeta">
+            </div>
+            <div class="input-group">
+                <label><span>📄</span> Descripción</label>
+                <input type="text" id="descInput" placeholder="Descripción breve..." value="Diseño moderno y elegante">
+            </div>
+            <div class="input-group">
+                <label><span>🎨</span> Categoría</label>
+                <select id="categorySelect">
+                    <option value="Naturaleza">🌿 Naturaleza</option>
+                    <option value="Tecnología">💻 Tecnología</option>
+                    <option value="Arte">🎨 Arte</option>
+                    <option value="Aventura">🧭 Aventura</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button id="addCardBtn">➕ Agregar tarjeta</button>
+                <button id="clearAllBtn" style="background:#5a626e;">🗑️ Limpiar todo</button>
+            </div>
+        </div>
+
+        <!-- contenedor de tarjetas -->
+        <div id="cardsContainer" class="cards-container">
+            <!-- las tarjetas se insertan dinámicamente -->
+            <div class="empty-state">✨ No hay tarjetas aún. ¡Agrega una usando el formulario! ✨</div>
+        </div>
+    </div>
+    <footer>
+        💡 Haz clic en cualquier tarjeta para eliminarla individualmente | 
+        <span style="opacity:0.7">Diseño responsivo con Glassmorphism</span>
+    </footer>
+</div>
+
+<script>
+    (function() {
+        // ---------- ELEMENTOS DOM ----------
+        const titleInput = document.getElementById('titleInput');
+        const descInput = document.getElementById('descInput');
+        const categorySelect = document.getElementById('categorySelect');
+        const addButton = document.getElementById('addCardBtn');
+        const clearButton = document.getElementById('clearAllBtn');
+        const cardsContainer = document.getElementById('cardsContainer');
+
+        // ---------- ARRAY PRINCIPAL DE TARJETAS (modelo) ----------
+        let cards = [];
+
+        // Colores de fondo suaves por categoría (para acentos visuales en badges y bordes)
+        const categoryTheme = {
+            'Naturaleza': { badgeBg: '#d9f0e1', badgeColor: '#156f39', borderAccent: '#2ecc71' },
+            'Tecnología': { badgeBg: '#e0e7ff', badgeColor: '#1e3a8a', borderAccent: '#3b82f6' },
+            'Arte': { badgeBg: '#fce4ec', badgeColor: '#b23c1c', borderAccent: '#e67e22' },
+            'Aventura': { badgeBg: '#fff0db', badgeColor: '#b45f1b', borderAccent: '#e67e22' }
+        };
+
+        // Helper para obtener el estilo dinámico según categoría (se usa para la tarjeta)
+        function getCategoryStyle(category) {
+            const theme = categoryTheme[category] || categoryTheme['Naturaleza'];
+            return {
+                badgeBg: theme.badgeBg,
+                badgeColor: theme.badgeColor,
+                borderLeft: `4px solid ${theme.borderAccent}`
+            };
+        }
+
+        // Función para renderizar todas las tarjetas a partir del array 'cards'
+        function renderCards() {
+            if (!cardsContainer) return;
+
+            // Si no hay tarjetas, mostrar mensaje de estado vacío
+            if (cards.length === 0) {
+                cardsContainer.innerHTML = `<div class="empty-state">✨ No hay tarjetas aún. ¡Agrega una usando el formulario! ✨</div>`;
+                return;
+            }
+
+            // Limpiar contenedor y reconstruir
+            cardsContainer.innerHTML = '';
+
+            cards.forEach((card, idx) => {
+                const styleObj = getCategoryStyle(card.category);
+                // Creamos el elemento article con clase card
+                const cardDiv = document.createElement('article');
+                cardDiv.className = 'card';
+                // Aplicar estilo de borde izquierdo personalizado según categoría
+                cardDiv.style.borderLeft = styleObj.borderLeft;
+                cardDiv.style.transition = 'all 0.2s';
+
+                // inner HTML estructurado
+                cardDiv.innerHTML = `
+                    <div class="card-title">${escapeHtml(card.title)}</div>
+                    <div class="card-desc">${escapeHtml(card.description)}</div>
+                    <div class="card-badge" style="background: ${styleObj.badgeBg}; color: ${styleObj.badgeColor};">${escapeHtml(card.category)}</div>
+                    <div style="font-size: 0.7rem; color:#8f9bb3; margin-top: 4px;">🖱️ click para eliminar</div>
+                `;
+
+                // Evento para eliminar tarjeta individualmente (al hacer clic en la tarjeta completa)
+                cardDiv.addEventListener('click', (e) => {
+                    e.stopPropagation();  // Evita propagación por si hay elementos anidados
+                    removeCardById(card.id);
+                });
+
+                cardsContainer.appendChild(cardDiv);
+            });
+        }
+
+        // Función auxiliar para escapar HTML y prevenir XSS
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // Generar ID simple pero único
+        function generateId() {
+            return Date.now() + '-' + Math.random().toString(36).substr(2, 8);
+        }
+
+        // Agregar nueva tarjeta usando los valores actuales de los inputs
+        function addCard() {
+            let title = titleInput.value.trim();
+            let description = descInput.value.trim();
+            let category = categorySelect.value;
+
+            // Validaciones mínimas
+            if (title === "") {
+                title = "Sin título";
+            }
+            if (description === "") {
+                description = "Sin descripción";
+            }
+
+            const newCard = {
+                id: generateId(),
+                title: title,
+                description: description,
+                category: category
+            };
+
+            cards.push(newCard);
+            renderCards();
+
+            // Opcional: limpiar campos después de agregar? mantendremos para flujo rápido,
+            // pero reiniciamos los campos a valores por defecto sutiles
+            // (solo si se quiere mejorar UX se pueden resetear algunos, pero dejamos flexible)
+            // Por experiencia, se reinicia el título y descripción a valores placeholder pero no obligatorio.
+            // Simplemente dejamos los campos tal cual para agregar múltiples rápido.
+            // Además, si se desea, se puede enfocar en título.
+            titleInput.value = "";
+            descInput.value = "";
+            titleInput.placeholder = "Nuevo título...";
+            descInput.placeholder = "Descripción creativa...";
+            titleInput.focus();
+        }
+
+        // Eliminar tarjeta por id
+        function removeCardById(id) {
+            cards = cards.filter(card => card.id !== id);
+            renderCards();
+            // Pequeña notificación sutil? no necesario pero feedback visual es el renderizado.
+        }
+
+        // Limpiar todas las tarjetas
+        function clearAllCards() {
+            if (cards.length > 0 && confirm("⚠️ ¿Eliminar todas las tarjetas? Esta acción es irreversible.")) {
+                cards = [];
+                renderCards();
+            } else if (cards.length === 0) {
+                // Si ya está vacío, solo mostrar alerta opcional
+                alert("✨ No hay tarjetas para eliminar.");
+            }
+        }
+
+        // Precargar algunos ejemplos interesantes para mostrar la funcionalidad
+        function loadExampleCards() {
+            const examples = [
+                { title: "Bosque Mágico", description: "Senderos ocultos y luciérnagas danzan entre helechos.", category: "Naturaleza" },
+                { title: "IA creativa", description: "Algoritmos generativos que componen arte visual.", category: "Tecnología" },
+                { title: "Cielos estrellados", description: "Observación astronómica en alta montaña.", category: "Aventura" },
+                { title: "Acuarela digital", description: "Pinceladas líquidas y colores vibrantes.", category: "Arte" }
+            ];
+            for (let ex of examples) {
+                cards.push({
+                    id: generateId(),
+                    title: ex.title,
+                    description: ex.description,
+                    category: ex.category
+                });
+            }
+            renderCards();
+        }
+
+        // Configurar eventos
+        function bindEvents() {
+            if (addButton) addButton.addEventListener('click', addCard);
+            if (clearButton) clearButton.addEventListener('click', clearAllCards);
+            // Adicional: permitir agregar con tecla Enter en los campos (mejora UX)
+            const inputs = [titleInput, descInput];
+            inputs.forEach(input => {
+                if (input) {
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addCard();
+                        }
+                    });
+                }
+            });
+            // Si se selecciona otra categoría, no hay problema, se usará al agregar
+        }
+
+        // Inicialización: cargar tarjetas de ejemplo, eventos y render inicial
+        function init() {
+            bindEvents();
+            // Cargamos 4 tarjetas de demostración atractivas
+            loadExampleCards();
+            // Por si queremos que el placeholder no interfiera y asignamos valores por defecto
+            titleInput.value = "";
+            descInput.value = "";
+            titleInput.placeholder = "Ej: Amanecer dorado";
+            descInput.placeholder = "Describe la magia...";
+        }
+
+        init();
+    })();
+</script>
+</body>
+</html>
