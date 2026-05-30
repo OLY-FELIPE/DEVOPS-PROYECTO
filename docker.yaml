@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  web:
+    image: proyecto-devops:latest  
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+    ports:
+      - "80:80"
